@@ -41,15 +41,23 @@ Explanation: [brief explanation]
 
 ### Code Implementation
 
-```python
-# Language: Python (or Java, C++, JavaScript, etc.)
+```cpp
+#include <vector>
+#include <unordered_map>
+#include <iostream>
+using namespace std;
 
-def solution():
-    """
-    Brief description of the function
-    """
-    # Your solution here
-    pass
+/**
+ * Brief description of the function
+ * 
+ * @param param1 Description of parameter 1
+ * @param param2 Description of parameter 2
+ * @return Description of return value
+ */
+vector<int> solution(vector<int>& param1, int param2) {
+    // Your solution here
+    return {};
+}
 ```
 
 ### Explanation

@@ -62,44 +62,53 @@ Instead of checking all pairs (O(n²)), we can use a hash map to store each numb
 
 ### Code Implementation
 
-```python
-def twoSum(nums, target):
-    """
-    Find two indices whose values sum to target.
-    
-    Args:
-        nums: List of integers
-        target: Target sum
-    
-    Returns:
-        List of two indices [i, j] where nums[i] + nums[j] == target
-    """
-    # Hash map to store value -> index mapping
-    num_map = {}
-    
-    # Iterate through the array
-    for i, num in enumerate(nums):
-        # Calculate the complement
-        complement = target - num
+```cpp
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+class Solution {
+public:
+    /**
+     * Find two indices whose values sum to target.
+     * 
+     * @param nums Vector of integers
+     * @param target Target sum
+     * @return Vector of two indices [i, j] where nums[i] + nums[j] == target
+     */
+    vector<int> twoSum(vector<int>& nums, int target) {
+        // Hash map to store value -> index mapping
+        unordered_map<int, int> numMap;
         
-        # Check if complement exists in the map
-        if complement in num_map:
-            # Found the pair!
-            return [num_map[complement], i]
+        // Iterate through the array
+        for (int i = 0; i < nums.size(); i++) {
+            // Calculate the complement
+            int complement = target - nums[i];
+            
+            // Check if complement exists in the map
+            if (numMap.find(complement) != numMap.end()) {
+                // Found the pair!
+                return {numMap[complement], i};
+            }
+            
+            // Store current number and its index
+            numMap[nums[i]] = i;
+        }
         
-        # Store current number and its index
-        num_map[num] = i
-    
-    # No solution found (shouldn't happen per problem constraints)
-    return []
+        // No solution found (shouldn't happen per problem constraints)
+        return {};
+    }
+};
 ```
 
 ### Explanation
-- **Line 8-9**: Create a hash map to store numbers we've seen and their indices
-- **Line 11-12**: Iterate through the array with both index and value
-- **Line 14**: Calculate what number we need to complete the sum
-- **Line 16-19**: If we've seen the complement before, return both indices
-- **Line 21-22**: Otherwise, store the current number for future lookups
+- **Line 1-3**: Include necessary headers (`vector` for arrays, `unordered_map` for hash map)
+- **Line 5-6**: Define a Solution class (common in LeetCode-style problems)
+- **Line 12**: Create an `unordered_map<int, int>` to store value -> index pairs
+- **Line 14**: Iterate through the array using traditional for loop with index
+- **Line 16**: Calculate the complement (target - current number)
+- **Line 18-21**: Check if complement exists using `find()` method. If found, return both indices
+- **Line 23**: Store the current number and its index in the map for future lookups
 
 ## Complexity Analysis
 
@@ -117,29 +126,38 @@ def twoSum(nums, target):
 ## Alternative Approaches
 
 ### Brute Force (O(n²))
-```python
-def twoSumBruteForce(nums, target):
-    for i in range(len(nums)):
-        for j in range(i + 1, len(nums)):
-            if nums[i] + nums[j] == target:
-                return [i, j]
-    return []
+```cpp
+vector<int> twoSumBruteForce(vector<int>& nums, int target) {
+    for (int i = 0; i < nums.size(); i++) {
+        for (int j = i + 1; j < nums.size(); j++) {
+            if (nums[i] + nums[j] == target) {
+                return {i, j};
+            }
+        }
+    }
+    return {};
+}
 ```
 
 ### Two-Pass Hash Map (O(n))
-```python
-def twoSumTwoPass(nums, target):
-    num_map = {}
-    # First pass: build the map
-    for i, num in enumerate(nums):
-        num_map[num] = i
+```cpp
+vector<int> twoSumTwoPass(vector<int>& nums, int target) {
+    unordered_map<int, int> numMap;
     
-    # Second pass: find the complement
-    for i, num in enumerate(nums):
-        complement = target - num
-        if complement in num_map and num_map[complement] != i:
-            return [i, num_map[complement]]
-    return []
+    // First pass: build the map
+    for (int i = 0; i < nums.size(); i++) {
+        numMap[nums[i]] = i;
+    }
+    
+    // Second pass: find the complement
+    for (int i = 0; i < nums.size(); i++) {
+        int complement = target - nums[i];
+        if (numMap.find(complement) != numMap.end() && numMap[complement] != i) {
+            return {i, numMap[complement]};
+        }
+    }
+    return {};
+}
 ```
 
 ## Related Problems

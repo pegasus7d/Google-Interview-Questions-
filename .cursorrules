@@ -1,0 +1,66 @@
+# Cursor Rules for Google Interview Questions Repository
+
+## Project Overview
+This repository contains Google interview questions with detailed solutions in C++ format, documented in markdown files.
+
+## Code Standards
+
+### Language
+- **Always use C++** for all code implementations
+- Use C++17 or later standards
+- Include necessary standard library headers
+
+### Code Style
+- Use `Solution` class structure (common in LeetCode-style problems)
+- Include proper C++ headers: `#include <vector>`, `#include <unordered_map>`, etc.
+- Use `using namespace std;` or fully qualify standard library names
+- Add clear comments explaining the logic
+- Use meaningful variable names
+
+### Documentation Format
+When creating or updating question files, follow this structure:
+1. **Problem Statement** - Clear description
+2. **Examples** - Multiple examples with explanations
+3. **Constraints** - List all constraints
+4. **Approach** - Step-by-step breakdown:
+   - Step 1: Understanding the Problem
+   - Step 2: Identifying the Strategy
+   - Step 3: Algorithm Design
+   - Step 4: Edge Cases
+5. **Solution** - C++ code with explanation
+6. **Complexity Analysis** - Time and Space complexity
+7. **Key Insights** - Important takeaways
+8. **Alternative Approaches** - Other solutions if applicable
+9. **Related Problems** - Links to similar problems
+
+## File Naming Convention
+- Use format: `##-problem-name.md` (e.g., `01-two-sum.md`, `02-valid-parentheses.md`)
+- Use lowercase with hyphens for problem names
+- Number files sequentially
+
+## Code Formatting
+- Use proper indentation (4 spaces or consistent tabs)
+- Add comments for complex logic
+- Include function documentation with `@param` and `@return` tags
+- Format code blocks with `cpp` syntax highlighting
+
+## When Adding New Questions
+1. Copy the TEMPLATE.md structure
+2. Fill in all sections completely
+3. Provide working C++ code
+4. Add the question link to README.md
+5. Ensure code is correct and well-commented
+
+## When Editing Existing Questions
+- Maintain the same structure
+- Keep C++ code consistent with existing style
+- Update explanations if code changes
+- Ensure all code examples are in C++
+
+## Important Notes
+- Never use Python, Java, or other languages - only C++
+- Always explain the approach before showing code
+- Include complexity analysis for every solution
+- Add edge case considerations
+- Keep explanations clear and educational
+

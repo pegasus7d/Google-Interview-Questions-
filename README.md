@@ -1,6 +1,6 @@
 # Google Interview Questions
 
-This repository contains solutions to Google interview questions with detailed approaches and explanations.
+This repository contains solutions to Google interview questions with detailed approaches and explanations. All solutions are implemented in **C++**.
 
 ## Structure
 
