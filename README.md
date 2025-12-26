@@ -4,24 +4,31 @@ This repository contains solutions to Google interview questions with detailed a
 
 ## Structure
 
-Each question is documented in a separate markdown file following this structure:
-- **Problem Statement**: Clear description of the problem
-- **Examples**: Input/output examples
-- **Approach**: Step-by-step explanation of the solution strategy
-- **Solution**: Code implementation with comments
-- **Time Complexity**: Analysis of time complexity
-- **Space Complexity**: Analysis of space complexity
-- **Key Insights**: Important takeaways from the problem
+Each question is documented in a separate markdown file following this **exact format order**:
+1. **Problem Statement**: Clear description of the problem
+2. **Examples**: Input/output examples (at least 2-3)
+3. **Constraints**: List all constraints
+4. **Approach**: Step-by-step breakdown (4 steps: Understanding, Strategy, Algorithm Design, Edge Cases)
+5. **Solution**: C++ code implementation with explanation
+6. **Complexity Analysis**: Time and Space complexity
+7. **Key Insights**: Important takeaways from the problem
+8. **Alternative Approaches**: Other solutions (optional)
+9. **Related Problems**: Similar problems (optional)
+
+**See [FORMAT.md](FORMAT.md) for detailed format guidelines.**
 
 ## How to Use
 
 1. Create a new markdown file for each question (e.g., `01-two-sum.md`)
 2. Follow the template structure provided in `TEMPLATE.md`
-3. Add your solution code with proper formatting
-4. Update this README with links to all questions
+3. **Maintain the exact format order**: Problem Statement → Examples → Constraints → Approach → Solution → Complexity Analysis → Key Insights
+4. Add your C++ solution code with proper formatting
+5. Include at least 2-3 examples with inputs, outputs, and explanations
+6. Update this README with links to all questions
 
 ## Questions
 
+- [Format Guide](FORMAT.md) - Detailed format structure and guidelines
 - [Template](TEMPLATE.md) - Template for documenting questions
 - [Two Sum](01-two-sum.md) - Find two indices whose values sum to target
 

@@ -18,20 +18,59 @@ This repository contains Google interview questions with detailed solutions in C
 - Use meaningful variable names
 
 ### Documentation Format
-When creating or updating question files, follow this structure:
-1. **Problem Statement** - Clear description
-2. **Examples** - Multiple examples with explanations
-3. **Constraints** - List all constraints
-4. **Approach** - Step-by-step breakdown:
-   - Step 1: Understanding the Problem
-   - Step 2: Identifying the Strategy
-   - Step 3: Algorithm Design
-   - Step 4: Edge Cases
-5. **Solution** - C++ code with explanation
-6. **Complexity Analysis** - Time and Space complexity
-7. **Key Insights** - Important takeaways
-8. **Alternative Approaches** - Other solutions if applicable
-9. **Related Problems** - Links to similar problems
+When creating or updating question files, **MUST follow this exact structure and order**:
+
+1. **Question Title** (H1) - `# Question Name`
+
+2. **Problem Statement** (H2) - `## Problem Statement`
+   - Clear description of the problem
+   - What is being asked
+   - Any important assumptions
+
+3. **Examples** (H2) - `## Examples`
+   - At least 2-3 examples
+   - Each example should have:
+     - Input
+     - Output
+     - Explanation
+   - Format: `### Example 1`, `### Example 2`, etc.
+
+4. **Constraints** (H2) - `## Constraints`
+   - List all constraints
+   - Input size limits
+   - Value ranges
+   - Any special conditions
+
+5. **Approach** (H2) - `## Approach`
+   - Must break down into 4 steps:
+     - **Step 1: Understanding the Problem** (H3)
+     - **Step 2: Identifying the Strategy** (H3)
+     - **Step 3: Algorithm Design** (H3)
+     - **Step 4: Edge Cases** (H3)
+
+6. **Solution** (H2) - `## Solution`
+   - Contains two subsections:
+     - **Code Implementation** (H3) - C++ code in code block with `cpp` syntax
+     - **Explanation** (H3) - Line-by-line or section explanation
+
+7. **Complexity Analysis** (H2) - `## Complexity Analysis`
+   - **Time Complexity** (H3)
+   - **Space Complexity** (H3)
+
+8. **Key Insights** (H2) - `## Key Insights`
+   - Important takeaways
+   - Learning points
+   - Pattern recognition
+
+9. **Alternative Approaches** (H2) - `## Alternative Approaches` [Optional]
+   - Other possible solutions
+   - Different time/space trade-offs
+
+10. **Related Problems** (H2) - `## Related Problems` [Optional]
+    - Links to similar problems
+    - Variations of the problem
+
+**CRITICAL**: Follow this exact order. Do not rearrange sections.
 
 ## File Naming Convention
 - Use format: `##-problem-name.md` (e.g., `01-two-sum.md`, `02-valid-parentheses.md`)
@@ -46,10 +85,14 @@ When creating or updating question files, follow this structure:
 
 ## When Adding New Questions
 1. Copy the TEMPLATE.md structure
-2. Fill in all sections completely
-3. Provide working C++ code
-4. Add the question link to README.md
-5. Ensure code is correct and well-commented
+2. Follow the exact format order: Problem Statement → Examples → Constraints → Approach → Solution → Complexity Analysis → Key Insights
+3. Fill in all required sections completely
+4. Provide working C++ code in the Solution section
+5. Include at least 2-3 examples with inputs, outputs, and explanations
+6. Break down Approach into 4 steps (Understanding, Strategy, Algorithm Design, Edge Cases)
+7. Add the question link to README.md
+8. Ensure code is correct and well-commented
+9. Use proper markdown heading levels (H1 for title, H2 for main sections, H3 for subsections)
 
 ## When Editing Existing Questions
 - Maintain the same structure
@@ -63,4 +106,5 @@ When creating or updating question files, follow this structure:
 - Include complexity analysis for every solution
 - Add edge case considerations
 - Keep explanations clear and educational
+
 
