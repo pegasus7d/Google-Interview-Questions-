@@ -328,6 +328,32 @@ int findFavoriteCityWithEarlyStop(int N, vector<vector<int>>& roads,
 4. Return favorite city with minimum total distance
 
 ```cpp
+// Helper function for Dijkstra's algorithm
+vector<int> dijkstra(int N, vector<vector<pair<int, int>>>& adj, int source) {
+    vector<int> dist(N, INT_MAX);
+    dist[source] = 0;
+    
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+    pq.push({0, source});
+    
+    while (!pq.empty()) {
+        auto [d, u] = pq.top();
+        pq.pop();
+        
+        if (d != dist[u]) continue;
+        
+        for (auto& [v, w] : adj[u]) {
+            int newDist = d + w;
+            if (newDist < dist[v]) {
+                dist[v] = newDist;
+                pq.push({dist[v], v});
+            }
+        }
+    }
+    
+    return dist;
+}
+
 int findFavoriteCityViaVertex(int N, vector<vector<int>>& roads, 
                                vector<int>& L, int S, int V) {
     // Build graph
@@ -338,35 +364,9 @@ int findFavoriteCityViaVertex(int N, vector<vector<int>>& roads,
         adj[v].push_back({u, time});
     }
     
-    // Helper function for Dijkstra
-    auto dijkstra = [&](int source) -> vector<int> {
-        vector<int> dist(N, INT_MAX);
-        dist[source] = 0;
-        
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-        pq.push({0, source});
-        
-        while (!pq.empty()) {
-            auto [d, u] = pq.top();
-            pq.pop();
-            
-            if (d != dist[u]) continue;
-            
-            for (auto& [v, w] : adj[u]) {
-                int newDist = d + w;
-                if (newDist < dist[v]) {
-                    dist[v] = newDist;
-                    pq.push({dist[v], v});
-                }
-            }
-        }
-        
-        return dist;
-    };
-    
     // Run Dijkstra from S and V
-    vector<int> distFromS = dijkstra(S);
-    vector<int> distFromV = dijkstra(V);
+    vector<int> distFromS = dijkstra(N, adj, S);
+    vector<int> distFromV = dijkstra(N, adj, V);
     
     // Check if V is reachable from S
     if (distFromS[V] == INT_MAX) {
