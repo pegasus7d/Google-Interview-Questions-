@@ -170,17 +170,17 @@ public:
         double currArea = 0.0;      // Area accumulated below current position
         double prevHeight = events[0].first;  // Previous event's y-coordinate
         
-        // Process first event to initialize combinedWidth
-        int firstType = events[0].second.first;
-        int firstEdge = events[0].second.second;
-        if (firstType == 1) {
-            combinedWidth += firstEdge;  // Square starts contributing
-        } else {
-            combinedWidth -= firstEdge;  // Square stops contributing
-        }
-        
         // Process events from bottom to top, starting from index 1
         for (int i = 1; i < events.size(); i++) {
+            // Update combined width based on previous event (events[i-1])
+            int prevType = events[i-1].second.first;
+            int prevEdge = events[i-1].second.second;
+            if (prevType == 1) {
+                combinedWidth += prevEdge;  // Previous square started contributing
+            } else {
+                combinedWidth -= prevEdge;  // Previous square stopped contributing
+            }
+            
             double currHeight = events[i].first;
             int type = events[i].second.first;   // 1 = start, 0 = end
             int edge = events[i].second.second;
@@ -210,13 +210,6 @@ public:
             // Update accumulated area and previous height
             currArea += areaDiff;
             prevHeight = currHeight;
-            
-            // Update combined width based on current event type
-            if (type == 1) {
-                combinedWidth += edge;  // Square starts contributing
-            } else {
-                combinedWidth -= edge;  // Square stops contributing
-            }
         }
         
         // Should never reach here, but return last height if needed
@@ -235,16 +228,16 @@ public:
 - **Line 40-43**: Initialize sweep line variables:
   - `combinedWidth`: Tracks total width of squares currently intersected
   - `currArea`: Accumulated area below current position
-  - `prevHeight`: Y-coordinate of previous event
-- **Line 45-50**: Process first event to initialize `combinedWidth` (handle start/end event)
-- **Line 52-75**: Process remaining events starting from index 1:
-  - **Line 57**: Calculate height difference since last event
-  - **Line 60**: Calculate area added in this interval = `width × height`
-  - **Line 63-74**: If adding this area exceeds half total, find exact position:
+  - `prevHeight`: Y-coordinate of previous event (first event's y-coordinate)
+- **Line 45-75**: Process events starting from index 1:
+  - **Line 47-52**: Update `combinedWidth` based on previous event (events[i-1]) before calculating area
+  - **Line 54-56**: Get current event details
+  - **Line 59**: Calculate height difference since last event
+  - **Line 62**: Calculate area added in this interval = `width × height`
+  - **Line 65-76**: If adding this area exceeds half total, find exact position:
     - If exactly equal, return current height
     - Otherwise, use linear interpolation to find exact position
-  - **Line 76-77**: Update accumulated area and previous height
-  - **Line 79-83**: Update `combinedWidth` based on current event type (add for start, subtract for end)
+  - **Line 78-79**: Update accumulated area and previous height
 
 **Key Formula:**
 ```
