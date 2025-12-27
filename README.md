@@ -30,7 +30,7 @@ Each question is documented in a separate markdown file following this **exact f
 
 - [Format Guide](FORMAT.md) - Detailed format structure and guidelines
 - [Template](TEMPLATE.md) - Template for documenting questions
-- [Two Sum](01-two-sum.md) - Find two indices whose values sum to target
+- [Q1: Maximum Distance with Energy Constraint](01-boat-energy.md) - Telephonic Round: Maximize distance traveled with energy constraints on a boat
 
 <!-- Add more questions here as you solve them -->
 
