@@ -32,6 +32,7 @@ Each question is documented in a separate markdown file following this **exact f
 - [Template](TEMPLATE.md) - Template for documenting questions
 - [Q1: Maximum Distance with Energy Constraint](01-boat-energy.md) - Telephonic Round: Maximize distance traveled with energy constraints on a boat
 - [Q2: Horizontal Line Dividing Squares in Half](02-square-division.md) - Find horizontal line that divides total square area into two equal halves using sweep line algorithm
+- [Q3: Shortest Path to Favorite City](03-shortest-path-to-favorite-city.md) - Round 1: Find favorite city reachable from source in minimum time using Dijkstra's algorithm
 
 <!-- Add more questions here as you solve them -->
 
