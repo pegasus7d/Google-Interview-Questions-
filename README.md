@@ -39,6 +39,7 @@ Each question is documented in a separate markdown file following this **exact f
 - [Q7: Longest Valid Word](07-longest-valid-word.md) - First Round: Find longest word that can be reduced by removing one character at a time using DFS with memoization
 - [Q8: Maximum Island Triplet Sum](08-maximum-island-triplet.md) - Round 1 DSA: Find 3 islands forming path A-B-C with maximum sum using graph traversal
 - [Q9: Koko Eating Bananas](09-koko-eating-bananas.md) - LeetCode 875: Find minimum eating speed to finish all bananas within h hours using binary search
+- [Q10: Step-By-Step Directions](10-step-by-step-directions.md) - LeetCode 2096: Find shortest path directions between two nodes using LCA and path finding
 
 <!-- Add more questions here as you solve them -->
 
