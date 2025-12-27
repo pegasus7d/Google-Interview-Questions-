@@ -69,10 +69,13 @@ Output: 2.0
   2. Check if the other two vertices exist: O(1) with hash set
   3. Calculate area: O(1)
 
-**Part 2 - Three Points Approach:**
-- For a rotated rectangle, given 3 points, we can compute if they form a rectangle
-- For each pair of points (potential diagonal), find all other points that form rectangles
-- **Key Insight:** Use vector mathematics to check if points form a rectangle
+**Part 2 - Diagonal Grouping Approach:**
+- **Key Insight:** In a rectangle, the two diagonals have:
+  - The same midpoint
+  - The same length
+- **Optimization:** Group all point pairs (potential diagonals) by their midpoint and squared length
+- For each group with at least 2 diagonals, any pair of diagonals can form a rectangle
+- This reduces complexity by only checking diagonals that can actually form rectangles
 
 ### Step 3: Algorithm Design
 
@@ -85,12 +88,15 @@ Output: 2.0
 3. Return maximum area
 
 **Part 2:**
-1. For each pair of points (potential diagonal endpoints)
-2. For each third point:
-   - Check if these 3 points can form a rectangle
-   - Calculate the 4th point using vector mathematics
-   - Check if 4th point exists
-   - Calculate area using cross product or determinant
+1. **Group diagonals**: For each pair of points, calculate:
+   - Midpoint: `((x1+x2)/2, (y1+y2)/2)`
+   - Squared length: `(x1-x2)² + (y1-y2)²`
+   - Create key from midpoint and squared length
+2. **Store in map**: Group all diagonals with same key together
+3. **Process groups**: For each group with at least 2 diagonals:
+   - Try all pairs of diagonals in the group
+   - Calculate area using determinant formula
+   - Update maximum area
 
 ### Step 4: Edge Cases
 - Less than 4 points: No rectangle possible
@@ -178,96 +184,97 @@ public:
 
 #### Logic Explanation
 
+**Key Insight - Diagonal Properties:**
+In a rectangle, the two diagonals have:
+- **Same midpoint**: The diagonals bisect each other
+- **Same length**: Both diagonals are equal
+
 **Step-by-Step:**
 
-1. **For each pair of points (potential diagonal):**
-   - Points `A(x1, y1)` and `B(x2, y2)` could be diagonal endpoints
+1. **Group diagonals by midpoint and length:**
+   - For each pair of points `(i, j)`, calculate:
+     - Midpoint: `((x_i + x_j)/2, (y_i + y_j)/2)`
+     - Squared length: `(x_i - x_j)² + (y_i - y_j)²`
+   - Create a unique key from midpoint and squared length
+   - Group all diagonals with the same key together
 
-2. **For each third point `C(x3, y3)`:**
-   - Check if `A`, `B`, `C` can form a rectangle
-   - In a rectangle, if `AB` is a diagonal, then `C` and the 4th point `D` should satisfy:
-     - `AC` and `BD` are the other diagonal, OR
-     - `AC` and `BC` are adjacent sides
+2. **Why this works:**
+   - If two diagonals share the same midpoint and length, they can form a rectangle
+   - The four endpoints of these two diagonals are the four vertices of the rectangle
 
-3. **Calculate 4th point `D`:**
-   - If `A`, `B`, `C` form a rectangle, then:
-     - Vector `AC` and vector `BC` should be perpendicular
-     - The 4th point `D = A + (C - A) + (B - A) = B + C - A`
+3. **Calculate area:**
+   - For each pair of diagonals in the same group:
+     - Take 3 points: one endpoint from first diagonal, both endpoints from second diagonal
+     - Use determinant formula to calculate area: `|det(AB, AC)|`
 
-4. **Verify rectangle:**
-   - Check if `D` exists in point set
-   - Verify that `AC` ⟂ `BC` (dot product = 0)
-   - Calculate area using cross product or determinant
-
-**Why 3 Points?**
-- Given 3 points of a rectangle, the 4th point is uniquely determined
-- We can verify if the 4 points form a rectangle by checking:
-  - Opposite sides are parallel
-  - Adjacent sides are perpendicular
+**Why Diagonal Grouping?**
+- **Efficiency**: Instead of checking all O(n³) combinations, we only check diagonals that can actually form rectangles
+- **Correctness**: Two diagonals with same midpoint and length guarantee a rectangle
+- **Reduction**: Groups typically have few diagonals, making the inner loop efficient
 
 #### Code Implementation
 
 ```cpp
 #include <vector>
-#include <unordered_set>
+#include <unordered_map>
 #include <algorithm>
 #include <cmath>
-#include <functional>
+#include <string>
 using namespace std;
-
-// Hash function for pair<int, int>
-struct PairHash {
-    size_t operator()(const pair<int, int>& p) const {
-        return hash<int>()(p.first) ^ (hash<int>()(p.second) << 1);
-    }
-};
 
 class Solution {
 private:
     /**
-     * Calculate area of rectangle using determinant formula
-     * Given 3 points A(x1,y1), B(x2,y2), C(x3,y3) forming a rectangle
-     * Area = |det(AB, AC)| where AB and AC are vectors
+     * Build a unique key using midpoint and squared diagonal length.
+     * In a rectangle, diagonals have the same midpoint and same length.
      */
-    double rectangleAreaUsingDeterminant(const pair<int, int>& A,
-                                         const pair<int, int>& B,
-                                         const pair<int, int>& C) {
-        int x1 = A.first, y1 = A.second;
-        int x2 = B.first, y2 = B.second;
-        int x3 = C.first, y3 = C.second;
-        
-        // Vector AB: (x2-x1, y2-y1)
-        // Vector AC: (x3-x1, y3-y1)
-        // Area = |det(AB, AC)| = |(x2-x1)*(y3-y1) - (y2-y1)*(x3-x1)|
-        
-        double v1x = x2 - x1;
-        double v1y = y2 - y1;
-        double v2x = x3 - x1;
-        double v2y = y3 - y1;
-        
-        // Determinant (cross product magnitude)
-        double area = abs(v1x * v2y - v1y * v2x);
-        return area;
+    string makeKey(double midX, double midY, double lenSq) {
+        return to_string(midX) + "#" +
+               to_string(midY) + "#" +
+               to_string(lenSq);
     }
     
     /**
-     * Check if two vectors are perpendicular (dot product = 0)
+     * Compute maximum rectangle area from one diagonal group.
+     * All diagonals in this group share the same midpoint and length,
+     * so they can form rectangles with each other.
      */
-    bool arePerpendicular(const pair<int, int>& A,
-                         const pair<int, int>& B,
-                         const pair<int, int>& C) {
-        // Vector AB: (x2-x1, y2-y1)
-        // Vector AC: (x3-x1, y3-y1)
-        // Dot product = (x2-x1)*(x3-x1) + (y2-y1)*(y3-y1)
+    double computeMaxAreaFromDiagonalGroup(
+        const vector<pair<int, int>>& diagonals,
+        const vector<pair<int, int>>& points
+    ) {
+        double maxArea = 0.0;
+        int m = diagonals.size();
         
-        int x1 = A.first, y1 = A.second;
-        int x2 = B.first, y2 = B.second;
-        int x3 = C.first, y3 = C.second;
+        // Try all pairs of diagonals in this group
+        for (int i = 0; i < m; i++) {
+            for (int j = i + 1; j < m; j++) {
+                int a = diagonals[i].first;   // First point of diagonal i
+                int b = diagonals[i].second;   // Second point of diagonal i
+                int c = diagonals[j].first;    // First point of diagonal j
+                
+                // Get coordinates
+                double x1 = points[a].first;
+                double y1 = points[a].second;
+                
+                double x2 = points[b].first;
+                double y2 = points[b].second;
+                
+                double x3 = points[c].first;
+                double y3 = points[c].second;
+                
+                // Determinant formula for area
+                // Area = |det(AB, AC)| where A=(x1,y1), B=(x2,y2), C=(x3,y3)
+                double area = abs(
+                    (x2 - x1) * (y3 - y1) -
+                    (y2 - y1) * (x3 - x1)
+                );
+                
+                maxArea = max(maxArea, area);
+            }
+        }
         
-        double dotProduct = (x2 - x1) * (x3 - x1) + (y2 - y1) * (y3 - y1);
-        
-        // Check if approximately zero (handling floating point)
-        return abs(dotProduct) < 1e-9;
+        return maxArea;
     }
     
 public:
@@ -281,64 +288,42 @@ public:
         int n = points.size();
         if (n < 4) return 0.0;
         
-        // Store points in hash set for O(1) lookup
-        unordered_set<pair<int, int>, PairHash> pointSet;
-        for (auto& p : points) {
-            pointSet.insert(p);
-        }
-        
         double maxArea = 0.0;
         
-        // Try all pairs of points as potential diagonal endpoints
+        // Group diagonals by (midpoint, squared length)
+        // Key insight: In a rectangle, diagonals have same midpoint and same length
+        unordered_map<string, vector<pair<int, int>>> diagonalGroups;
+        
+        // Enumerate all pairs of points as potential diagonals
         for (int i = 0; i < n; i++) {
-            const auto& A = points[i];  // First diagonal endpoint
-            int x1 = A.first, y1 = A.second;
-            
             for (int j = i + 1; j < n; j++) {
-                const auto& B = points[j];  // Second diagonal endpoint
-                int x2 = B.first, y2 = B.second;
+                // Calculate midpoint
+                double midX = (points[i].first + points[j].first) / 2.0;
+                double midY = (points[i].second + points[j].second) / 2.0;
                 
-                // For each third point
-                for (int k = 0; k < n; k++) {
-                    if (k == i || k == j) continue;
-                    
-                    const auto& C = points[k];  // Third point
-                    int x3 = C.first, y3 = C.second;
-                    
-                    // Check if AB and AC are perpendicular (rectangle property)
-                    // In a rectangle, if A, B, C are three vertices, then:
-                    // Either AB ⟂ AC (A is a corner) or we need different check
-                    
-                    // Actually, for rectangle with vertices A, B, C, D:
-                    // If A and B are diagonal endpoints, then C and D are the other two
-                    // We need to check: AC ⟂ BC (C is a corner)
-                    
-                    // Vector AC: (x3-x1, y3-y1)
-                    // Vector BC: (x3-x2, y3-y2)
-                    double acx = x3 - x1;
-                    double acy = y3 - y1;
-                    double bcx = x3 - x2;
-                    double bcy = y3 - y2;
-                    
-                    // Check if AC ⟂ BC (dot product = 0)
-                    double dotProduct = acx * bcx + acy * bcy;
-                    if (abs(dotProduct) > 1e-9) continue;  // Not perpendicular
-                    
-                    // Calculate 4th point D
-                    // In rectangle, if A, B are diagonal and C is a vertex,
-                    // then D = A + B - C (vector addition)
-                    int x4 = x1 + x2 - x3;
-                    int y4 = y1 + y2 - y3;
-                    pair<int, int> D = {x4, y4};
-                    
-                    // Check if D exists and is different from A, B, C
-                    if (pointSet.count(D) && D != A && D != B && D != C) {
-                        // Calculate area using determinant
-                        double area = rectangleAreaUsingDeterminant(A, B, C);
-                        maxArea = max(maxArea, area);
-                    }
-                }
+                // Calculate squared diagonal length
+                double dx = points[i].first - points[j].first;
+                double dy = points[i].second - points[j].second;
+                double lengthSquared = dx * dx + dy * dy;
+                
+                // Create key and group diagonals
+                string key = makeKey(midX, midY, lengthSquared);
+                diagonalGroups[key].push_back({i, j});
             }
+        }
+        
+        // Compute rectangle areas from each group
+        for (auto& entry : diagonalGroups) {
+            const auto& diagonals = entry.second;
+            
+            // Need at least 2 diagonals to form a rectangle
+            if (diagonals.size() < 2) continue;
+            
+            // All diagonals in this group can form rectangles with each other
+            maxArea = max(
+                maxArea,
+                computeMaxAreaFromDiagonalGroup(diagonals, points)
+            );
         }
         
         return maxArea;
@@ -557,16 +542,16 @@ public:
 | Part | Approach | Time Complexity | Space Complexity |
 |------|----------|----------------|------------------|
 | Part 1 | Diagonal (2 points) | O(n²) | O(n) |
-| Part 2 | Three points | O(n³) | O(n) |
+| Part 2 | Diagonal grouping | O(n² + k²) | O(n²) |
 
 **Note:** Part 2 can be optimized further, but O(n³) is reasonable for n ≤ 1000.
 
 ## Key Insights
 - **Diagonal Approach (Part 1)**: Instead of trying all 4 points O(n⁴), use 2 points as diagonal and check if other 2 exist O(n²)
-- **Three Points Approach (Part 2)**: Given 3 points, the 4th point is uniquely determined if they form a rectangle
-- **Perpendicular Check**: Use dot product = 0 to verify adjacent sides are perpendicular
-- **Area Calculation**: Determinant/cross product works for rectangles at any angle
-- **Hash Set**: Essential for O(1) point existence checking
+- **Diagonal Grouping (Part 2)**: Group diagonals by midpoint and length - only diagonals in same group can form rectangles
+- **Rectangle Property**: In a rectangle, diagonals have same midpoint and same length
+- **Area Calculation**: Determinant formula `|det(AB, AC)|` works for rectangles at any angle
+- **Optimization**: Diagonal grouping significantly reduces the number of combinations to check
 
 ## Related Problems
 - Max Points on a Line
