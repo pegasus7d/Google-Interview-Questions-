@@ -37,6 +37,7 @@ Each question is documented in a separate markdown file following this **exact f
 - [Q5: Largest Rectangle from Points](05-largest-rectangle-from-points.md) - Round 3: Find 4 points forming rectangle with largest area (axis-aligned and rotated)
 - [Q6: Maximum Path Sum Leaf Nodes](06-maximum-path-sum-leaf-nodes.md) - First Round: Find all leaf nodes with maximum root-to-leaf path sum using DFS
 - [Q7: Longest Valid Word](07-longest-valid-word.md) - First Round: Find longest word that can be reduced by removing one character at a time using DFS with memoization
+- [Q8: Maximum Island Triplet Sum](08-maximum-island-triplet.md) - Round 1 DSA: Find 3 islands forming path A-B-C with maximum sum using graph traversal
 
 <!-- Add more questions here as you solve them -->
 
