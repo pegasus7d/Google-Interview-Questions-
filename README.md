@@ -40,6 +40,7 @@ Each question is documented in a separate markdown file following this **exact f
 - [Q8: Maximum Island Triplet Sum](08-maximum-island-triplet.md) - Round 1 DSA: Find 3 islands forming path A-B-C with maximum sum using graph traversal
 - [Q9: Koko Eating Bananas](09-koko-eating-bananas.md) - LeetCode 875: Find minimum eating speed to finish all bananas within h hours using binary search
 - [Q10: Step-By-Step Directions](10-step-by-step-directions.md) - LeetCode 2096: Find shortest path directions between two nodes using LCA and path finding
+- [Q11: Largest Square Submatrix](11-largest-square-submatrix.md) - Find position of square submatrix of all 1's with size >= k using dynamic programming
 
 <!-- Add more questions here as you solve them -->
 
