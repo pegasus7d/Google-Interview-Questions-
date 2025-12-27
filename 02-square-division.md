@@ -126,7 +126,6 @@ Instead of checking every possible y-coordinate (which would be inefficient), we
 ```cpp
 #include <vector>
 #include <algorithm>
-#include <cmath>
 using namespace std;
 
 class Solution {
@@ -135,114 +134,82 @@ public:
      * Find horizontal line that divides total square area in half
      * 
      * @param squares Vector of [x, y, edge_length] for each square
+     *                 where (x, y) is the top-left corner
      * @return y-coordinate of dividing line
      */
     double separateSquares(vector<vector<int>>& squares) {
-        // Calculate total area
-        long long totalArea = 0;
-        for (auto& sq : squares) {
-            long long edge = sq[2];
-            totalArea += edge * edge;
+        vector<pair<double, double>> events;
+        double totalArea = 0.0;
+
+        // Build events
+        // For a square with top-left at (x, y) and edge length a:
+        // - Bottom edge is at y - a (square starts contributing)
+        // - Top edge is at y (square stops contributing)
+        for (auto &sq : squares) {
+            double y = sq[1];  // Top-left y-coordinate
+            double a = sq[2];  // Edge length
+
+            totalArea += a * a;
+            events.push_back({y - a, +a}); // Square starts (bottom edge)
+            events.push_back({y,     -a}); // Square ends (top edge)
         }
-        
-        if (totalArea == 0) return 0.0;
-        
-        // Create events: (y-coordinate, {type, edge_length})
-        // type: 1 = square starts (bottom edge), 0 = square ends (top edge)
-        vector<pair<double, pair<int, int>>> events;
-        
-        for (auto& sq : squares) {
-            int y = sq[1], edge = sq[2];
-            double bottomY = y - edge;  // Bottom edge of square
-            double topY = y;            // Top edge of square
-            
-            // Event when square starts contributing (bottom edge)
-            events.push_back({bottomY, {1, edge}});
-            // Event when square stops contributing (top edge)
-            events.push_back({topY, {0, edge}});
-        }
-        
-        // Sort events by y-coordinate
+
         sort(events.begin(), events.end());
-        
-        // Initialize sweep line variables
-        int combinedWidth = 0;      // Sum of edge lengths of active squares
-        double currArea = 0.0;      // Area accumulated below current position
-        double prevHeight = events[0].first;  // Previous event's y-coordinate
-        
-        // Process events from bottom to top, starting from index 1
+
+        double target = totalArea / 2.0;
+        double currArea = 0.0;
+        double combinedWidth = 0.0;
+
+        double prevY = events[0].first;
+        combinedWidth += events[0].second;  // Initialize with first event
+
         for (int i = 1; i < events.size(); i++) {
-            // Update combined width based on previous event (events[i-1])
-            int prevType = events[i-1].second.first;
-            int prevEdge = events[i-1].second.second;
-            if (prevType == 1) {
-                combinedWidth += prevEdge;  // Previous square started contributing
-            } else {
-                combinedWidth -= prevEdge;  // Previous square stopped contributing
+            double currY = events[i].first;
+            double heightDiff = currY - prevY;
+            double areaAdded = combinedWidth * heightDiff;
+
+            if (currArea + areaAdded >= target) {
+                double deltaY = (target - currArea) / combinedWidth;
+                return prevY + deltaY;
             }
-            
-            double currHeight = events[i].first;
-            int type = events[i].second.first;   // 1 = start, 0 = end
-            int edge = events[i].second.second;
-            
-            // Calculate height difference since last event
-            double heightDiff = currHeight - prevHeight;
-            
-            // Area added between prevHeight and currHeight
-            // Area = width × height (since width is constant in this interval)
-            double areaDiff = combinedWidth * heightDiff;
-            
-            // Check if adding this area would exceed half total area
-            if (currArea + areaDiff >= totalArea / 2.0) {
-                // If exactly equal, return current height
-                if (abs(currArea + areaDiff - totalArea / 2.0) < 1e-9) {
-                    return currHeight;
-                }
-                // Otherwise, interpolate to find exact position
-                if (combinedWidth == 0) {
-                    return currHeight;  // Avoid division by zero
-                }
-                // Solve: currArea + (combinedWidth × optimalHeightDiff) = totalArea / 2
-                double optimalHeightDiff = (totalArea / 2.0 - currArea) / combinedWidth;
-                return prevHeight + optimalHeightDiff;
-            }
-            
-            // Update accumulated area and previous height
-            currArea += areaDiff;
-            prevHeight = currHeight;
+
+            currArea += areaAdded;
+            combinedWidth += events[i].second;  // Update width for next interval
+            prevY = currY;
         }
-        
-        // Should never reach here, but return last height if needed
-        return events.back().first;
+
+        return -1.0;  // Should never reach here
     }
 };
 ```
 
 ### Explanation
-- **Line 15-20**: Calculate total area by summing `edge²` for each square
-- **Line 22**: Handle edge case where total area is 0
-- **Line 24-35**: Create events for each square:
-  - Bottom edge event (type=1): Square starts contributing area
-  - Top edge event (type=0): Square stops contributing area
-- **Line 38**: Sort events by y-coordinate to process from bottom to top
-- **Line 40-43**: Initialize sweep line variables:
-  - `combinedWidth`: Tracks total width of squares currently intersected
+- **Line 13-23**: Create events for each square:
+  - For a square with top-left at `(x, y)` and edge length `a`:
+    - Bottom edge is at `y - a` (square starts contributing) → event `{y - a, +a}`
+    - Top edge is at `y` (square stops contributing) → event `{y, -a}`
+  - Calculate total area by summing `a²` for each square
+- **Line 25**: Sort events by y-coordinate to process from bottom to top
+- **Line 27-30**: Initialize sweep line variables:
+  - `target`: Half of total area
   - `currArea`: Accumulated area below current position
-  - `prevHeight`: Y-coordinate of previous event (first event's y-coordinate)
-- **Line 45-75**: Process events starting from index 1:
-  - **Line 47-52**: Update `combinedWidth` based on previous event (events[i-1]) before calculating area
-  - **Line 54-56**: Get current event details
-  - **Line 59**: Calculate height difference since last event
-  - **Line 62**: Calculate area added in this interval = `width × height`
-  - **Line 65-76**: If adding this area exceeds half total, find exact position:
-    - If exactly equal, return current height
-    - Otherwise, use linear interpolation to find exact position
-  - **Line 78-79**: Update accumulated area and previous height
+  - `combinedWidth`: Sum of edge lengths of active squares
+  - `prevY`: Y-coordinate of previous event
+- **Line 31-32**: Process first event to initialize `combinedWidth`
+- **Line 34-47**: Process remaining events starting from index 1:
+  - **Line 36**: Calculate height difference since last event
+  - **Line 37**: Calculate area added in this interval = `combinedWidth × heightDiff`
+  - **Line 39-42**: If adding this area exceeds target, find exact position using linear interpolation:
+    - `deltaY = (target - currArea) / combinedWidth`
+    - Return `prevY + deltaY`
+  - **Line 44**: Update accumulated area
+  - **Line 45**: Update `combinedWidth` for the next interval (add/subtract based on event)
+  - **Line 46**: Update previous y-coordinate
 
 **Key Formula:**
 ```
-optimalHeightDiff = (totalArea/2 - currArea) / combinedWidth
-answer = prevHeight + optimalHeightDiff
+deltaY = (target - currArea) / combinedWidth
+answer = prevY + deltaY
 ```
 
 ## Complexity Analysis
