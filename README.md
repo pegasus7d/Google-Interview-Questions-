@@ -35,6 +35,7 @@ Each question is documented in a separate markdown file following this **exact f
 - [Q3: Shortest Path to Favorite City](03-shortest-path-to-favorite-city.md) - Round 1: Find favorite city reachable from source in minimum time using Dijkstra's algorithm
 - [Q4: Highest Score Anagram](04-highest-score-anagram.md) - Round 2: Find anagram with highest score using precomputation and hash grouping
 - [Q5: Largest Rectangle from Points](05-largest-rectangle-from-points.md) - Round 3: Find 4 points forming rectangle with largest area (axis-aligned and rotated)
+- [Q6: Maximum Path Sum Leaf Nodes](06-maximum-path-sum-leaf-nodes.md) - First Round: Find all leaf nodes with maximum root-to-leaf path sum using DFS
 
 <!-- Add more questions here as you solve them -->
 
