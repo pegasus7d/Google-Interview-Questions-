@@ -109,6 +109,7 @@ Output: 2.0
 #include <unordered_set>
 #include <algorithm>
 #include <cmath>
+#include <string>
 using namespace std;
 
 class Solution {
@@ -166,101 +167,12 @@ public:
 };
 ```
 
-#### Why String Encoding?
+**Why String Encoding?**
+- Simple and straightforward
+- Works for any integer range (including negatives)
+- No need for custom hash functions
+- Easy to implement and understand
 
-**Question:** Why use string encoding instead of simpler methods?
-
-**Answer:** We need to encode `(x, y)` pairs for hash set lookup. Options:
-
-1. **String encoding** `"x,y"`: Simple, works for any integer range
-2. **Long long encoding** `(x << 32) | y`: More efficient but limited:
-   - Requires `x` and `y` to fit in 32 bits
-   - Can't handle negative numbers directly without offset
-   - More complex to implement correctly
-
-**Better Alternative - Using pair in unordered_set:**
-
-```cpp
-// Define hash function for pair<int, int>
-struct PairHash {
-    size_t operator()(const pair<int, int>& p) const {
-        return hash<int>()(p.first) ^ (hash<int>()(p.second) << 1);
-    }
-};
-
-unordered_set<pair<int, int>, PairHash> pointSet;
-for (auto& p : points) {
-    pointSet.insert(p);
-}
-
-// Then check:
-pair<int, int> p3 = {x1, y2};
-pair<int, int> p4 = {x2, y1};
-if (pointSet.count(p3) && pointSet.count(p4)) {
-    // Calculate area
-}
-```
-
-**Complete Code with Pair Hash:**
-
-```cpp
-#include <vector>
-#include <unordered_set>
-#include <algorithm>
-#include <functional>
-using namespace std;
-
-// Hash function for pair<int, int>
-struct PairHash {
-    size_t operator()(const pair<int, int>& p) const {
-        return hash<int>()(p.first) ^ (hash<int>()(p.second) << 1);
-    }
-};
-
-class Solution {
-public:
-    double largestRectangleAxisAligned(vector<pair<int, int>>& points) {
-        int n = points.size();
-        if (n < 4) return 0.0;
-        
-        // Store points in hash set
-        unordered_set<pair<int, int>, PairHash> pointSet;
-        for (auto& p : points) {
-            pointSet.insert(p);
-        }
-        
-        double maxArea = 0.0;
-        
-        // Try all pairs as diagonal endpoints
-        for (int i = 0; i < n; i++) {
-            int x1 = points[i].first;
-            int y1 = points[i].second;
-            
-            for (int j = i + 1; j < n; j++) {
-                int x2 = points[j].first;
-                int y2 = points[j].second;
-                
-                // Skip if on same line
-                if (x1 == x2 || y1 == y2) continue;
-                
-                // Other two vertices
-                pair<int, int> p3 = {x1, y2};
-                pair<int, int> p4 = {x2, y1};
-                
-                // Check if both exist
-                if (pointSet.count(p3) && pointSet.count(p4)) {
-                    double width = abs(x2 - x1);
-                    double height = abs(y2 - y1);
-                    double area = width * height;
-                    maxArea = max(maxArea, area);
-                }
-            }
-        }
-        
-        return maxArea;
-    }
-};
-```
 
 ### Part 2: Rotated Rectangle
 
@@ -457,15 +369,8 @@ public:
 #include <unordered_set>
 #include <algorithm>
 #include <cmath>
-#include <functional>
+#include <string>
 using namespace std;
-
-// Hash function for pair<int, int>
-struct PairHash {
-    size_t operator()(const pair<int, int>& p) const {
-        return hash<int>()(p.first) ^ (hash<int>()(p.second) << 1);
-    }
-};
 
 class Solution {
 private:
@@ -502,9 +407,10 @@ public:
         int n = points.size();
         if (n < 4) return 0.0;
         
-        unordered_set<pair<int, int>, PairHash> pointSet;
+        // Store points in hash set using string encoding
+        unordered_set<string> pointSet;
         for (auto& p : points) {
-            pointSet.insert(p);
+            pointSet.insert(to_string(p.first) + "," + to_string(p.second));
         }
         
         double maxArea = 0.0;
@@ -520,8 +426,8 @@ public:
                 if (x1 == x2 || y1 == y2) continue;
                 
                 // Other two vertices
-                pair<int, int> p3 = {x1, y2};
-                pair<int, int> p4 = {x2, y1};
+                string p3 = to_string(x1) + "," + to_string(y2);
+                string p4 = to_string(x2) + "," + to_string(y1);
                 
                 if (pointSet.count(p3) && pointSet.count(p4)) {
                     double area = abs(x2 - x1) * abs(y2 - y1);
@@ -540,9 +446,10 @@ public:
         int n = points.size();
         if (n < 4) return 0.0;
         
-        unordered_set<pair<int, int>, PairHash> pointSet;
+        // Store points in hash set using string encoding
+        unordered_set<string> pointSet;
         for (auto& p : points) {
-            pointSet.insert(p);
+            pointSet.insert(to_string(p.first) + "," + to_string(p.second));
         }
         
         double maxArea = 0.0;
@@ -575,10 +482,14 @@ public:
                     // Calculate 4th point: D = A + B - C
                     int x4 = x1 + x2 - x3;
                     int y4 = y1 + y2 - y3;
-                    pair<int, int> D = {x4, y4};
+                    string D = to_string(x4) + "," + to_string(y4);
                     
                     // Check if D exists and is distinct
-                    if (pointSet.count(D) && D != A && D != B && D != C) {
+                    string A_str = to_string(x1) + "," + to_string(y1);
+                    string B_str = to_string(x2) + "," + to_string(y2);
+                    string C_str = to_string(x3) + "," + to_string(y3);
+                    
+                    if (pointSet.count(D) && D != A_str && D != B_str && D != C_str) {
                         double area = rectangleAreaUsingDeterminant(A, B, C);
                         maxArea = max(maxArea, area);
                     }
