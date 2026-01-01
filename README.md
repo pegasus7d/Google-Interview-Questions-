@@ -44,6 +44,7 @@ Each question is documented in a separate markdown file following this **exact f
 - [Q12: First Expired RPC](12-first-expired-rpc.md) - Round 1: Find first time when any RPC expires based on timeout using hash maps
 - [Q13: Rearrange Neighbourhoods](13-rearrange-neighbourhoods.md) - Round 2: Rearrange houses in neighbourhoods to be sorted with no duplicates using greedy approach with multiset
 - [Q14: Square of 1's with Constraint](14-square-of-ones-with-constraint.md) - Find square of 1's with side length >= ⌈√n⌉ using recursive DP with memoization
+- [Q15: Maximum Min Plus Max Subarray](15-maximum-min-plus-max-subarray.md) - Find subarray with maximum (min + max) value by checking adjacent pairs
 
 <!-- Add more questions here as you solve them -->
 
