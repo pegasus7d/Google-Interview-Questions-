@@ -47,6 +47,7 @@ Each question is documented in a separate markdown file following this **exact f
 - [Q15: Maximum Min Plus Max Subarray](15-maximum-min-plus-max-subarray.md) - Find subarray with maximum (min + max) value by checking adjacent pairs
 - [Q16: Maximum Distance with Power Heap](16-maximum-distance-with-power-heap.md) - Greedy approach using min-heap to maximize distance by sailing on best K days
 - [Q17: Apartment Assignment](17-apartment-assignment.md) - Onsite: Assign people to apartments respecting preferences using greedy three-step approach
+- [Q18: 3D Lattice Power Propagation](18-3d-lattice-power-propagation.md) - Onsite Round 2 L3: Propagate power from torch nodes to wire nodes in 3D lattice using multi-source BFS
 
 <!-- Add more questions here as you solve them -->
 
