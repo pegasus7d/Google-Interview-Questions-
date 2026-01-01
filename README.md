@@ -41,6 +41,7 @@ Each question is documented in a separate markdown file following this **exact f
 - [Q9: Koko Eating Bananas](09-koko-eating-bananas.md) - LeetCode 875: Find minimum eating speed to finish all bananas within h hours using binary search
 - [Q10: Step-By-Step Directions](10-step-by-step-directions.md) - LeetCode 2096: Find shortest path directions between two nodes using LCA and path finding
 - [Q11: Largest Square Submatrix](11-largest-square-submatrix.md) - Find position of square submatrix of all 1's with size >= k using dynamic programming
+- [Q12: First Expired RPC](12-first-expired-rpc.md) - Round 1: Find first time when any RPC expires based on timeout using hash maps
 
 <!-- Add more questions here as you solve them -->
 
