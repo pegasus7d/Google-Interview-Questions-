@@ -45,6 +45,7 @@ Each question is documented in a separate markdown file following this **exact f
 - [Q13: Rearrange Neighbourhoods](13-rearrange-neighbourhoods.md) - Round 2: Rearrange houses in neighbourhoods to be sorted with no duplicates using greedy approach with multiset
 - [Q14: Square of 1's with Constraint](14-square-of-ones-with-constraint.md) - Find square of 1's with side length >= ⌈√n⌉ using recursive DP with memoization
 - [Q15: Maximum Min Plus Max Subarray](15-maximum-min-plus-max-subarray.md) - Find subarray with maximum (min + max) value by checking adjacent pairs
+- [Q16: Maximum Distance with Power Heap](16-maximum-distance-with-power-heap.md) - Greedy approach using min-heap to maximize distance by sailing on best K days
 
 <!-- Add more questions here as you solve them -->
 
