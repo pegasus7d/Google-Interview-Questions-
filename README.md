@@ -50,6 +50,7 @@ Each question is documented in a separate markdown file following this **exact f
 - [Q18: 3D Lattice Power Propagation](18-3d-lattice-power-propagation.md) - Onsite Round 2 L3: Propagate power from torch nodes to wire nodes in 3D lattice using multi-source BFS
 - [Q19: Question-Volunteer Matching](19-question-volunteer-matching.md) - Maximum bipartite matching: Assign questions to volunteers based on tag matching using DFS augmenting paths
 - [Q20: File System Consolidation](20-file-system-consolidation.md) - Consolidate file paths: replace files with directory name when all files in directory are selected
+- [Q21: Balanced Parentheses Unique](21-balanced-parentheses-unique.md) - Onsite: Check if parentheses are balanced with unique pairing constraint using stack and count tracking
 
 <!-- Add more questions here as you solve them -->
 
